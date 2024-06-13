@@ -1,34 +1,58 @@
-/*WAP to find the inverse of input integer in mod n*/
-#include<stdio.h>
-int gcd(int num1,int num2){
-    if(num2==0){
-        return num1;
+#include <stdio.h>
+
+int extendedEuclidean(int a, int b, int *x, int *y) {
+    // Base case: if b is 0, then gcd is a
+    if (b == 0) {
+        *x = 1;
+        *y = 0;
+        return a;
     }
-    printf("%d=%dx%d+%d\n",num1,num2,num1/num2,num1%num2);
-    return gcd(num2,num1%num2);
+
+    int x1, y1; // To store results of recursive call
+    int gcd = extendedEuclidean(b, a % b, &x1, &y1);
+
+    // Update x and y using results of recursive call
+    *x = y1;
+    *y = x1 - (a / b) * y1;
+
+    return gcd;
 }
-void extendedEucidean(int num1,int mum2){
+
+int main() {
+    int a, b;
+    int s, t;
+
+    // Input the numbers
+      printf("Enter the number to find the inverse: ");
+    scanf("%d", &a);
     
-}
+    printf("Enter the modulo value: ");
+    scanf("%d", &b);
 
-int main(){
-   int num1,num2;
-   printf("Enter the value of num1:");
-   scanf("%d",&num1);
-   printf("Enter the value of num2:");
-   scanf("%d",&num2);
-   if(num1<num2){
-    int temp=num1;
-    num1=num2;
-    num2=temp;
+    // Calculate the GCD and the coefficients s and t
+     int gcd;
+     int inverse;
+    if(a>b){
+        gcd = extendedEuclidean(a, b, &s, &t);
+        if(s<0){
+        s+=b;
+        inverse=s%b;
+        }
+    }else{
+        gcd = extendedEuclidean(b, a, &s, &t);
+        if(t<0){
+        t+=b;
+        inverse=t%b;
+        }
+     
+    }
+   
 
-   }
-   int gcdValue=gcd(num1,num2);
-   if(gcdValue==1){
-    extendedEuclidean(num1,num2);
-   }else{
-    printf("GCD of %d and %d is not 1.\n So inverse doesnot exist.\n");
+    // Output the results
+    printf("GCD of %d and %d is %d\n", a, b, gcd);
+    printf("Coefficients s and t are %d and %d\n", s, t);
+    
+    printf("Inverse of %d:%d\n",a,inverse);
 
-   }
-   return 0;
+    return 0;
 }
